@@ -10,6 +10,8 @@ const app = express();
 app.use(json());
 app.use(requestIp.mw());
 
+const port = process.env.PORT || 8080;
+
 const accuWeatherAPIKey = process.env.ACCUWEATHER_TOKEN
 
 app.get('/api/hello', async (req, res) => {
@@ -66,6 +68,6 @@ app.get('/api/hello', async (req, res) => {
     }
 })
 
-app.listen(5000, () => {
+app.listen(port, () => {
     console.log('Server is running on port 5000');
 })
