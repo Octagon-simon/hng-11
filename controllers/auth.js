@@ -1,18 +1,19 @@
 import { Router } from "express";
 import Octavalidate from "octavalidate-nodejs";
-import { capitaliseFirstLetter, comparePasswords, formatErrors, generateUID, hashPassword } from "../modules/index.js";
+import { capitaliseFirstLetter, comparePasswords, formatErrors, generateAccessToken, generateUID, hashPassword } from "../modules/index.js";
 import dbClient from "../utils/db.js";
-import jwt from 'jsonwebtoken';
 
 const authRouter = new Router();
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 //utility to create organisation
 const createOrganisation = async ({ firstName, userId }) => {
 
-    //create organization name
-    const orgName = `${capitaliseFirstLetter(firstName)}'s Organization`;
+    //create organisation name
+    const orgName = `${capitaliseFirstLetter(firstName)}'s Organisation`;
 
-    //generate organizationId
+    //generate organisationId
     const orgId = generateUID(userId);
 
     return dbClient.query('INSERT INTO organisation (orgid, name, created_by, users) VALUES ($1, $2, $3, $4) RETURNING *', [orgId, orgName, userId, [userId]]);
@@ -87,7 +88,7 @@ authRouter.post('/register', async (req, res) => {
         //insert user into the database
         const userCreated = await dbClient.query('INSERT INTO users (userId, firstName, lastName, email, password, phone) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *', [userId, firstName, lastName, email, hashedPassword, phone]);
 
-        //create organization for this user
+        //create organisation for this user
         const orgCreated = await createOrganisation({ firstName, userId });
 
         //check if records were created
@@ -96,7 +97,8 @@ authRouter.post('/register', async (req, res) => {
                 status: 'success',
                 message: 'Registration successful',
                 data: {
-                    accessToken: jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' }),
+                    accessToken: generateAccessToken(userId, JWT_SECRET),
+                    organisation: orgCreated.rows[0].name,
                     user: {
                         userId,
                         firstName,
@@ -180,7 +182,7 @@ authRouter.post('/login', async (req, res) => {
         }
 
         //generate token
-        const token = jwt.sign({ userId: user.userid }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = generateAccessToken(user.userid, JWT_SECRET)
 
         return res.status(200).json({
             status: 'success',

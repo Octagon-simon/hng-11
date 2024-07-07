@@ -1,5 +1,8 @@
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { configDotenv } from 'dotenv';
+configDotenv()
 
 function formatErrors(input) {
     const errors = [];
@@ -19,13 +22,20 @@ function formatErrors(input) {
         }
     }
 
-    return { errors };
+    return errors;
 }
 
 
 function generateUID(data) {
     return crypto.createHash('md5').update(data).digest('hex');
 }
+
+const generateAccessToken = (userId, secret) => {
+    const payload = { userId };
+    const options = { expiresIn: '1h' }; // Token expires in 1 hour
+
+    return jwt.sign(payload, secret, options);
+};
 
 // Function to hash a password
 async function hashPassword(password) {
@@ -48,7 +58,7 @@ async function comparePasswords(password, hashedPassword) {
     }
 }
 
-function capitaliseFirstLetter(string){
+function capitaliseFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
@@ -56,6 +66,7 @@ export {
     capitaliseFirstLetter,
     formatErrors,
     generateUID,
+    generateAccessToken,
     hashPassword,
     comparePasswords,
 }

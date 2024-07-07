@@ -26,7 +26,7 @@ orgRouter.get('/', authenticated, async (req, res) => {
 
         return res.status(200).json({
             status: 'success',
-            message: 'User retrieved successfully',
+            message: 'Organisations retrieved successfully',
             data: {
                 organisations: orgData
             }
@@ -51,11 +51,11 @@ orgRouter.get('/:orgId', authenticated, async (req, res) => {
         const { orgId } = req?.params || {};
 
         if (!orgId) return res.status(400).json({
-            message: "Organization ID is required"
+            message: "Organisation ID is required"
         })
 
         //get user from database
-        const { rows: orgData } = await dbClient.query(`SELECT * FROM organisation WHERE orgid = $1 LIMIT 1 AND created_by = $2`, [orgId, userId]);
+        const { rows: orgData } = await dbClient.query(`SELECT * FROM organisation WHERE orgid = $1 AND created_by = $2 LIMIT 1`, [orgId, userId]);
 
         //check if data was returned
         if (!orgData?.length) {
@@ -120,10 +120,10 @@ orgRouter.post('/', authenticated, async (req, res) => {
         //destructure request body
         const { name, description } = req.body;
 
-        //create organization name
-        const orgName = `${capitaliseFirstLetter(name)}'s Organization`;
+        //create organisation name
+        const orgName = `${capitaliseFirstLetter(name)}'s Organisation`;
 
-        //generate organizationId
+        //generate organisationId
         const orgId = generateUID(userId);
 
         const { rows: newOrgData } = await dbClient.query('INSERT INTO organisation (orgid, name, description, created_by, users) VALUES ($1, $2, $3, $4, $5) RETURNING *', [orgId, orgName, description, userId, [userId]]);
@@ -163,10 +163,10 @@ orgRouter.post('/:orgId/users', async (req, res) => {
         const { userId } = req?.body || {};
 
         if (!(orgId && userId)) return res.status(400).json({
-            message: "Organization ID & UserId are required"
+            message: "Organisation ID & UserId are required"
         })
 
-        //retrieve organization
+        //retrieve organisation
         const { rows: orgData } = await dbClient.query(`SELECT * FROM organisation WHERE orgid = $1 LIMIT 1`, [orgId])
 
         //check if data was returned
@@ -174,10 +174,10 @@ orgRouter.post('/:orgId/users', async (req, res) => {
             return res.status(404).json({ error: 'Organisation not found' });
         }
 
-        //check if user exists already in this organization
+        //check if user exists already in this organisation
         if ([...orgData?.[0].users].includes(userId)) {
             return res.status(400).json({
-                message: "User already exists in this organization"
+                message: "User already exists in this organisation"
             })
         }
 
@@ -191,7 +191,7 @@ orgRouter.post('/:orgId/users', async (req, res) => {
         //add user to users list
         const newUser = [...orgData?.[0].users || [], userId]
 
-        //update the organization in the database
+        //update the organisation in the database
         const { rows: updatedOrgData } = await dbClient.query(`UPDATE organisation SET users = $1 WHERE orgid = $2 RETURNING *`, [newUser, orgId])
 
         //check if data was returned

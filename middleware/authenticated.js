@@ -15,12 +15,12 @@ export default async (req, res, next) => {
         if (!userId) return res.status(401).json({ message: "Unauthorized" });
 
         //check if userId exists
-        const { rows } = await dbClient.query('SELECT * FROM users WHERE userId = $1 LIMIT 1', [userId]);
+        const { rows: userData } = await dbClient.query('SELECT * FROM users WHERE userId = $1 LIMIT 1', [userId]);
 
-        if (!rows?.length) return res.status(401).json({ message: "Unauthorized" });
+        if (!userData?.length) return res.status(401).json({ message: "Unauthorized" });
 
         //add user id to request object
-        req.user = { userId }
+        req.user = { userId, firstName: userData.firstname, lastName: userData.lastname, email: userData.email, phone: userData.phone }
 
         return next();
 

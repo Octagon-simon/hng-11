@@ -1,0 +1,266 @@
+{
+	"info": {
+		"_postman_id": "b254eb19-ce01-4b32-8b65-5aa8a4dc226c",
+		"name": "HNG - stage2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14184966",
+		"_collection_link": "https://kabocash-technologies.postman.co/workspace/KaboCash-Workspace~ed1cd07e-a4f8-436e-a9aa-aaabcb25d736/collection/14184966-b254eb19-ce01-4b32-8b65-5aa8a4dc226c?action=share&source=collection_link&creator=14184966"
+	},
+	"item": [
+		{
+			"name": "/auth/register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"Simon\", // must not be null\n    \"lastName\": \"Ugorji\",\n    \"email\": \"me@you.com\",\n    \"password\": \"12345678\",\n    \"phone\": \"09102990898\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"me@you.com\",\n    \"password\": \"12345678\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/users/:id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiZmI0MGZkNTQ5ZGRhYzk3NDVhZDdlYzUwYjNiMjk5NSIsImlhdCI6MTcyMDM3ODYxOSwiZXhwIjoxNzIwMzgyMjE5fQ.GmSSlYFYFegDWPMTgZ7XlIznOmhQeo4p9L4LNpQBlRw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/users/bfb40fd549ddac9745ad7ec50b3b2995",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"users",
+						"bfb40fd549ddac9745ad7ec50b3b2995"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/organisations/:orgId",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiZmI0MGZkNTQ5ZGRhYzk3NDVhZDdlYzUwYjNiMjk5NSIsImlhdCI6MTcyMDM3OTM5NywiZXhwIjoxNzIwMzgyOTk3fQ.FDyoh1drah63NXxNMXZpVKfTOmiKsuWQL5fPRz4zIes",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/organisations/4d7589ecb8b116428ad7083f9093464f",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"organisations",
+						"4d7589ecb8b116428ad7083f9093464f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/organisations",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiZmI0MGZkNTQ5ZGRhYzk3NDVhZDdlYzUwYjNiMjk5NSIsImlhdCI6MTcyMDM3OTM5NywiZXhwIjoxNzIwMzgyOTk3fQ.FDyoh1drah63NXxNMXZpVKfTOmiKsuWQL5fPRz4zIes",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Tony\", // Required and cannot be null\n\t\"description\": \"Testing\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/organisations/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"organisations",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/organisations",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiZmI0MGZkNTQ5ZGRhYzk3NDVhZDdlYzUwYjNiMjk5NSIsImlhdCI6MTcyMDM3OTM5NywiZXhwIjoxNzIwMzgyOTk3fQ.FDyoh1drah63NXxNMXZpVKfTOmiKsuWQL5fPRz4zIes",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Tony\", // Required and cannot be null\n\t\"description\": \"Testing\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/organisations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"organisations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/organisations/:orgId/users",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiZmI0MGZkNTQ5ZGRhYzk3NDVhZDdlYzUwYjNiMjk5NSIsImlhdCI6MTcyMDM3OTM5NywiZXhwIjoxNzIwMzgyOTk3fQ.FDyoh1drah63NXxNMXZpVKfTOmiKsuWQL5fPRz4zIes",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\" : \"bfb40fd549ddac9745ad7ec50b3b2995\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/organisations/4d7589ecb8b116428ad7083f9093464f/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"organisations",
+						"4d7589ecb8b116428ad7083f9093464f",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
