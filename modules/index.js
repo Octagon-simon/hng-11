@@ -1,34 +1,61 @@
-import { IPinfoWrapper } from "node-ipinfo";
-import axios from "axios";
-import { configDotenv } from "dotenv";
+import crypto from 'crypto';
+import bcrypt from 'bcrypt';
 
-configDotenv();
+function formatErrors(input) {
+    const errors = [];
 
-function sendGetDataWithAxios(url, data, headers) {
+    // Iterate over each key in the input object
+    for (const key in input) {
+        if (input.hasOwnProperty(key)) {
+            const fields = input[key];
+            for (const field in fields) {
+                if (fields.hasOwnProperty(field)) {
+                    const fieldMessages = fields[field];
+                    // Get the first value (message) from the field object
+                    const message = Object.values(fieldMessages)[0];
+                    errors.push({ field, message });
+                }
+            }
+        }
+    }
 
-    // Append the data to the URL as query parameters
-    const queryString = new URLSearchParams(data).toString();
-    const requestUrl = `${url}?${queryString}`;
-
-    return new Promise((resolve, reject) => {
-        axios.get(requestUrl, { headers })
-            .then(response => {
-                resolve(response.data);
-            })
-            .catch(error => {
-                reject(error);
-            });
-    });
+    return { errors };
 }
 
-//ip info
-async function getIpInfo(ipAddress) {
-    const ipinfo = new IPinfoWrapper(process.env.IPINFO_TOKEN);
 
-    return await ipinfo.lookupIp(ipAddress)
+function generateUID(data) {
+    return crypto.createHash('md5').update(data).digest('hex');
+}
+
+// Function to hash a password
+async function hashPassword(password) {
+    const saltRounds = 10; // Number of salt rounds to use
+    try {
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        return hashedPassword;
+    } catch (err) {
+        console.error('Error hashing password:', err);
+    }
+}
+
+// Function to compare a password with a hash
+async function comparePasswords(password, hashedPassword) {
+    try {
+        const match = await bcrypt.compare(password, hashedPassword);
+        return match;
+    } catch (err) {
+        console.error('Error comparing passwords:', err);
+    }
+}
+
+function capitaliseFirstLetter(string){
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 export {
-    sendGetDataWithAxios,
-    getIpInfo
+    capitaliseFirstLetter,
+    formatErrors,
+    generateUID,
+    hashPassword,
+    comparePasswords,
 }
