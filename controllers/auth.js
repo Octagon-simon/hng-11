@@ -33,13 +33,13 @@ authRouter.post('/register', async (req, res) => {
                 type: "string",
                 required: true,
                 // maxLength: 50,
-                ruleTitle: "alphaOnly"
+                // ruleTitle: "alphaOnly"
             },
             lastName: {
                 type: "string",
                 required: true,
                 // maxLength: 50,
-                ruleTitle: "alphaOnly"
+                // ruleTitle: "alphaOnly"
             },
             email: {
                 type: "string",
