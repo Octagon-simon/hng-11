@@ -30,19 +30,55 @@ userRouter.get('/:id', async (req, res) => {
         //return data
         let userData = {};
 
+        function formatResponse(data) {
+            const result = {};
+
+            data.forEach(entry => {
+                const {
+                    userid,
+                    firstname,
+                    lastname,
+                    email,
+                    phone,
+                    orgid,
+                    name,
+                    description
+                } = entry;
+
+                if (!result[userid]) {
+                    result[userid] = {
+                        userId: userid,
+                        firstName: firstname,
+                        lastName: lastname,
+                        email: email,
+                        phone: phone,
+                        organisations: []
+                    };
+                }
+
+                result[userid].organisations.push({
+                    orgId: orgid,
+                    name: name,
+                    description: description
+                });
+            });
+
+            return Object.values(result)[0];
+        }
+
         //check if id matches the logged in user
         if (id?.toString() === userId?.toString()) {
             //get user from database
-            const { rows } = await dbClient.query(`SELECT userid, firstname, lastname, email, phone FROM users WHERE userid = $1 LIMIT 1`, [userId]);
+            const { rows } = await dbClient.query(`SELECT users.userid, users.firstname, users.lastname, users.email,  users.phone, organisation.orgid, organisation.name, organisation.description FROM users INNER JOIN organisation ON organisation.created_by = users.userid WHERE users.userid = $1`, [userId]);
 
-            if (rows.length > 0) userData = rows[0];
+            if (rows.length > 0) userData = formatResponse(rows);
 
         } else if (id?.toString() !== "") {
 
             //get org data from database
-            const { rows } = await dbClient.query(`SELECT orgid, name, description FROM organisation WHERE $1 = ANY(users) LIMIT 1`, [id]);
+            const { rows } = await dbClient.query(`SELECT orgid, name, description FROM organisation WHERE $1 = ANY(users)`, [id]);
 
-            if (rows.length > 0) userData = rows[0];
+            if (rows.length > 0) userData = formatResponse(rows);
         }
 
         //check if data was returned
