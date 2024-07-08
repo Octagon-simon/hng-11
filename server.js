@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 })
 
 //register authentication routes
-app.use('/auth', authRouter);
+app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/organisations', orgRouter);
 
