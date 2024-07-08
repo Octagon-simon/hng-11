@@ -25,23 +25,36 @@ userRouter.get('/:id', async (req, res) => {
         //get userId
         const { userId } = req.user
 
-        //get user from database
-        const { rows: userData } = await dbClient.query(`SELECT * FROM users WHERE userid = $1 LIMIT 1`, [userId]);
+        const { id } = req?.params || {}
+
+        //return data
+        let userData = {};
+
+        //check if id matches the logged in user
+        if (id?.toString() === userId?.toString()) {
+            //get user from database
+            const { rows } = await dbClient.query(`SELECT userid, firstname, lastname, email, phone FROM users WHERE userid = $1 LIMIT 1`, [userId]);
+
+            if (rows.length > 0) userData = rows[0];
+
+        } else if (id?.toString() !== "") {
+
+            //get org data from database
+            const { rows } = await dbClient.query(`SELECT orgid, name, description FROM organisation WHERE $1 = ANY(users) LIMIT 1`, [id]);
+
+            if (rows.length > 0) userData = rows[0];
+        }
 
         //check if data was returned
-        if (!userData?.length) {
-            return res.status(404).json({ error: 'User not found' });
+        if (!Object.keys(userData)?.length) {
+            return res.status(400).json({ error: 'User not found' });
         }
 
         return res.status(200).json({
             status: 'success',
             message: 'User retrieved successfully',
             data: {
-                userId: userData[0].userid,
-                firstName: userData[0].firstname,
-                lastName: userData[0].lastname,
-                email: userData[0].email,
-                phone: userData[0].phone,
+                ...userData
             }
         });
 
