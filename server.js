@@ -17,4 +17,12 @@ app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/organisations', orgRouter);
 
+/// 404 ERROR
+app.use((req, res) => {
+    return res.status(404).json({
+        error: "Route not found",
+    });
+});
+
+
 export default app;

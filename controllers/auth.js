@@ -82,7 +82,7 @@ authRouter.post('/register', async (req, res) => {
         const { rows } = await dbClient.query('SELECT * FROM users WHERE email = $1 OR phone = $2 LIMIT 1', [email, phone]);
 
         if (rows?.length) {
-            return res.status(409).json({ error: 'A user with this email address already exists' });
+            return res.status(422).json({ error: 'A user with this email address already exists' });
         }
 
         //insert user into the database

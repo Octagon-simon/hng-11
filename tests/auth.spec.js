@@ -89,7 +89,7 @@ describe('End-to-End Tests', () => {
             .send(userData)
             .set('Accept', 'application/json');
 
-        expect(response.status).toBe(409);
+        expect(response.status).toBe(422);
         expect(response.body).toHaveProperty('error', 'A user with this email address already exists');
     });
 

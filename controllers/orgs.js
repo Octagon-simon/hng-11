@@ -176,7 +176,7 @@ orgRouter.post('/:orgId/users', async (req, res) => {
 
         //check if user exists already in this organisation
         if ([...orgData?.[0].users].includes(userId)) {
-            return res.status(400).json({
+            return res.status(422).json({
                 message: "User already exists in this organisation"
             })
         }
