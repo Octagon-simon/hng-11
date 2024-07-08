@@ -54,7 +54,7 @@ authRouter.post('/register', async (req, res) => {
             },
             phone: {
                 type: "string",
-                required: true,
+                // required: true,
                 // maxLength: 14,
                 // ruleTitle: "digitsOnly"
             }
