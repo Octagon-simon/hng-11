@@ -98,12 +98,12 @@ orgRouter.post('/', authenticated, async (req, res) => {
             name: {
                 type: "string",
                 required: true,
-                ruleTitle: 'alphaOnly'
+                // ruleTitle: 'alphaOnly'
             },
             description: {
                 type: "string",
-                required: true,
-                ruleTitle: "generalText"
+                // required: true,
+                // ruleTitle: "generalText"
             }
         }
 
